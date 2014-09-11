@@ -1,0 +1,10 @@
+bin/
+lib/
+.settings/
+.classpath
+.project
+*.class
+*.jar
+res/textures/bedrock.png #(temporary)
+/gradle
+/.gradle
