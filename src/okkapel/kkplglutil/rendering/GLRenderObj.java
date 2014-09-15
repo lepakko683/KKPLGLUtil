@@ -1,5 +1,6 @@
 package okkapel.kkplglutil.rendering;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.opengl.GL15;
@@ -7,11 +8,11 @@ import org.lwjgl.opengl.GL15;
 public class GLRenderObj {
 	private int vboid = -1;
 	private int dataSize = 0;
-	private FloatBuffer data = null;
+	private ByteBuffer data = null;
 	private GLRenderMethod renderMethod;
 	private boolean mergeable = true;
 	
-	public GLRenderObj(GLRenderMethod renderMethod, FloatBuffer data, int GL_usage) {
+	public GLRenderObj(GLRenderMethod renderMethod, ByteBuffer data, int GL_usage) {
 		if(renderMethod == GLRenderMethod.VERTEX_ARRAY || renderMethod == GLRenderMethod.VERTEX_BUFFER_OBJECT) {
 			this.renderMethod = renderMethod;
 			this.data = data;
@@ -41,7 +42,7 @@ public class GLRenderObj {
 		return this.vboid;
 	}
 	
-	public FloatBuffer getData() {
+	public ByteBuffer getData() {
 		return this.data;
 	}
 	

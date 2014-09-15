@@ -18,15 +18,6 @@ public class GLRenderBufferHandler {
 		renderObjs = new ArrayList<GLRenderObj>();
 	}
 	
-	public GLRenderObjPointer addRenderObj(GLRenderObj obj, int texId) {
-		if(renderObjs.add(obj)) {
-			cannotMerge = false;
-			return new GLRenderObjPointer(0, texId, false, renderObjs.size()-1);
-		}
-		
-		return null;
-	}
-	
 	public GLRenderObj getRenderObj(int id) {
 		if(id < 0 || id >= renderObjs.size()) {
 			return null;

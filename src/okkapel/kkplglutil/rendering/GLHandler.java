@@ -2,6 +2,7 @@ package okkapel.kkplglutil.rendering;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +50,7 @@ public class GLHandler {
 		groups.get(id).renderGroup();
 	}
 	
-	public static GLRenderObjPointer createVBO(FloatBuffer data, int gl_usage, Texture tex, int vertCount) {
+	public static GLRenderObjPointer createROBJ(ByteBuffer data, int gl_usage, Texture tex, int vertCount) {
 		buffer = new GLRenderObj(GLRenderMethod.VERTEX_BUFFER_OBJECT, data, gl_usage);
 		int arrid = -1;
 		for(int i=0;i<rendObjs.size();i++) {
@@ -88,15 +89,15 @@ public class GLHandler {
 			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, robj.getVBOId());
 			
 			glTexCoordPointer(2, GL_FLOAT, RenderBufferGenerator.DEFAULT_GL_STRIDE, 0);
-			glVertexPointer(3, GL_FLOAT, 8*4, 5*4);
-			glColorPointer(3, GL_FLOAT, 8*4, 2*4);
+			glVertexPointer(3, GL_FLOAT, RenderBufferGenerator.DEFAULT_GL_STRIDE, 2*4+4);
+			glColorPointer(4, GL_UNSIGNED_BYTE, RenderBufferGenerator.DEFAULT_GL_STRIDE, 2*4);
 			
 			glDrawArrays(GL_TRIANGLES, offset, vcount);
 			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 			
 		} else {
 			// VA
-			glInterleavedArrays(GL_T2F_C3F_V3F, RenderBufferGenerator.DEFAULT_GL_STRIDE, robj.getData());
+			glInterleavedArrays(GL_T2F_C4UB_V3F, RenderBufferGenerator.DEFAULT_GL_STRIDE, robj.getData());
 			glDrawArrays(GL_TRIANGLES, offset, vcount);
 		}
 		
