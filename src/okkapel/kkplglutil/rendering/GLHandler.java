@@ -50,8 +50,8 @@ public class GLHandler {
 		groups.get(id).renderGroup();
 	}
 	
-	public static GLRenderObjPointer createROBJ(ByteBuffer data, int gl_usage, Texture tex, int vertCount) {
-		buffer = new GLRenderObj(GLRenderMethod.VERTEX_BUFFER_OBJECT, data, gl_usage);
+	public static GLRenderObjPointer createROBJ(ByteBuffer data, int gl_usage, Texture tex, int vertCount, GLRenderMethod mthd) {
+		buffer = new GLRenderObj(mthd, data, gl_usage, vertCount);
 		int arrid = -1;
 		for(int i=0;i<rendObjs.size();i++) {
 			if(rendObjs.get(i) == null) {
@@ -108,6 +108,26 @@ public class GLHandler {
 			glBindTexture(GL_TEXTURE_2D, 0);
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
+	}
+	
+	public static void renderPtrSubData(GLRenderObjPointer rptr, ByteBuffer data, long additOffset) {
+		GLRenderObj robj = rendObjs.get(rptr.getArrIndex());
+		if(robj.getRenderMethod() == GLRenderMethod.VERTEX_BUFFER_OBJECT) {
+			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, robj.getVBOId());
+			GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, rptr.getOffset()+additOffset, data);
+			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		} else {
+			robj.modifBufferData(rptr.getOffset()+(int)additOffset, data);
+		}
+		
+	}
+	
+//	protected static void bindRenderObj() {
+//		
+//	}
+	
+	public static GLRenderObj getROBJForRPTR(GLRenderObjPointer rptr) {
+		return rendObjs.get(rptr.getArrIndex());
 	}
 	
 }

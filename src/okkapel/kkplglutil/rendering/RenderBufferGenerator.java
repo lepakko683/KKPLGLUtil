@@ -23,7 +23,7 @@ public class RenderBufferGenerator {
 	
 	
 	public RenderBufferGenerator() {
-		dataArray = new byte[8*65536]; // this should be large enough buffer
+		dataArray = new byte[1<<22]; // this should be large enough buffer
 	}
 	
 	public boolean isEmpty() {
@@ -70,7 +70,7 @@ public class RenderBufferGenerator {
 	
 	private byte[] buffer = new byte[4];
 	public void addVertexWColorWUV(float x, float y, float z, float r, float g, float b, float a, float u, float v) {
-		if(!canAdd(8)) {
+		if(!canAdd(5*4+4)) {
 			return;
 		}
 		floatToBytes(u, buffer); System.arraycopy(buffer, 0, dataArray, arrayPos, 4); arrayPos+=4;
