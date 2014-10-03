@@ -3,7 +3,14 @@ package okkapel.kkplglutil.rendering.font;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import okkapel.kkplglutil.rendering.GLHandler;
+import okkapel.kkplglutil.rendering.GLRenderMethod;
+import okkapel.kkplglutil.rendering.GLRenderObjPointer;
+import okkapel.kkplglutil.rendering.RenderBufferGenerator;
+import okkapel.kkplglutil.util.Colour;
+
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
 
 public class FontRenderer {
 	
@@ -55,27 +62,30 @@ public class FontRenderer {
 	}
 	
 	private static void renderChr(int indx, float x, float y, float scale) {
-		
 		GL11.glTexCoord2f(getChrU(indx), getChrV(indx));
 		GL11.glVertex2f(x, y);
-//		GL11.glTexCoord2f(0f, 1f);
-		
 		
 		GL11.glTexCoord2f(getChrU(indx), getChrV(indx)+font.singleChrH);
 		GL11.glVertex2f(x, y+scale);
-//		GL11.glTexCoord2f(1f, 1f);
-		
 		
 		GL11.glTexCoord2f(getChrU(indx)+font.singleChrW, getChrV(indx)+font.singleChrH);
 		GL11.glVertex2f(x+scale, y+scale);
-//		GL11.glTexCoord2f(1f, 0f);
-		
 		
 		GL11.glTexCoord2f(getChrU(indx)+font.singleChrW, getChrV(indx));
 		GL11.glVertex2f(x+scale, y);
-//		GL11.glTexCoord2f(0f, 0f);
 	}
 	
+	public static GLRenderObjPointer createTextRobj(float x, float y, float fontSize, char[] txt, Colour color) {
+		RenderBufferGenerator rbg = RenderBufferGenerator.INSTANCE;
+		
+		float xoffs = 0f;
+		for(int i=0;i<txt.length;i++) {
+			rbg.addRect2D(x+xoffs, y, xoffs+x+fontSize, y+fontSize, 1f, color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha(), getChrU(txt[i]), getChrV(txt[i]), getChrU(txt[i])+font.singleChrW, getChrV(txt[i])+font.singleChrH);
+			xoffs += (font.getChrWidth(txt[i])/(float)font.singleTexWidth)*fontSize + 4f;
+		}
+		
+		return GLHandler.createROBJ(rbg.createBuffer(), GL15.GL_DYNAMIC_DRAW, fontFSource.getTexture(), 6*txt.length, GLRenderMethod.VERTEX_BUFFER_OBJECT);
+	}
 	
 	public static int getStringWidthInPixels() {
 		return 0;

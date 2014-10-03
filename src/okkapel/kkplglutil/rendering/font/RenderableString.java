@@ -1,12 +1,11 @@
 package okkapel.kkplglutil.rendering.font;
 
+import okkapel.kkplglutil.rendering.GLRenderObjPointer;
 import celestibytes.lib.almightytext.Advstr;
 
 public class RenderableString extends Advstr {
 	
-	// GLRenderGroup for textparts
-	// private GLRenderGroup textparts;
-	
+	private GLRenderObjPointer wholeStr;
 	private RendTextObject[] rtxtobjs;
 	
 	private int width, height;
@@ -15,14 +14,18 @@ public class RenderableString extends Advstr {
 		super(text);
 	}
 	
-	public void textAreaWidthChanged() {
-		
+	public RenderableString(String text, int width, int height) {
+		this(text);
+		this.width = width;
+		this.height = height;
 	}
+	
+	public void textAreaWidthChanged() {} // TODO
 	
 	@Override
 	protected void onTranslationChanged() {
 		super.onTranslationChanged();
-		
+		// recreate vbo
 	}
 	
 	@Override
@@ -30,4 +33,5 @@ public class RenderableString extends Advstr {
 		super.preAdvstrDelete();
 		// delete vbo
 	}
+	
 }

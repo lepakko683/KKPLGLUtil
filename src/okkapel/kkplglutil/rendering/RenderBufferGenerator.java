@@ -88,6 +88,20 @@ public class RenderBufferGenerator {
 		addVertexWColorWUV(x, y, z, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), u, v);
 	}
 	
+	/**
+	 * (u1, v1) top-left of the texture
+	 * (u2, v2) bottom-right of the texture
+	 */
+	public void addRect2D(float x1, float y1, float x2, float y2, float z, float r, float g, float b, float a, float u1, float v1, float u2, float v2) {
+		addVertexWColorWUV(x1, y1, z, r, g, b, a, u1, v1);
+		addVertexWColorWUV(x1, y2, z, r, g, b, a, u1, v2);
+		addVertexWColorWUV(x2, y2, z, r, g, b, a, u2, v2);
+		
+		addVertexWColorWUV(x2, y2, z, r, g, b, a, u2, v2);
+		addVertexWColorWUV(x2, y1, z, r, g, b, a, u2, v1);
+		addVertexWColorWUV(x1, y1, z, r, g, b, a, u1, v1);
+	}
+	
 	public ByteBuffer createBuffer() {
 		ByteBuffer ret = BufferUtils.createByteBuffer(arrayPos-origin);
 		ret.put(dataArray, origin, arrayPos);

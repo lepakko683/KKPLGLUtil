@@ -30,11 +30,14 @@ public class GLHandler {
 	}
 	
 	public static void deinit() {
+		int remCount = 0;
 		for(int i=0;i<rendObjs.size();i++) {
 			if(rendObjs.get(i) != null) {
 				rendObjs.get(i).deleteVbo();
+				remCount++;
 			}
 		}
+		System.out.println("Deleted " + remCount + " VBOs");
 	}
 	
 	public static void renderGroup(String name) {
