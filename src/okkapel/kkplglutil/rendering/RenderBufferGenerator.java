@@ -18,6 +18,7 @@ public class RenderBufferGenerator {
 	private byte[] dataArray;
 	private int arrayPos = 0;
 	private int origin = 0;
+	private int vcount = 0;
 //	private int bufferDataTypes = -1;
 //	private int subBufferDataTypes = -1;
 	
@@ -48,6 +49,7 @@ public class RenderBufferGenerator {
 		if(errored) {
 			errored = false;
 		}
+		vcount = 0; // TODO: sub-buffers
 		if(origin != 0) {
 			arrayPos = origin;
 			origin = 0;
@@ -82,6 +84,7 @@ public class RenderBufferGenerator {
 		floatToBytes(x, buffer); System.arraycopy(buffer, 0, dataArray, arrayPos, 4); arrayPos+=4;
 		floatToBytes(y, buffer); System.arraycopy(buffer, 0, dataArray, arrayPos, 4); arrayPos+=4;
 		floatToBytes(z, buffer); System.arraycopy(buffer, 0, dataArray, arrayPos, 4); arrayPos+=4;
+		vcount++;
 	}
 	
 	public void addVertexWColorWUV(float x, float y, float z, Colour c, float u, float v) {
@@ -131,5 +134,9 @@ public class RenderBufferGenerator {
 			arr[1] = (byte) ((flt >> 16) & 255);
 			arr[0] = (byte) ((flt >> 24) & 255);
 		}
+	}
+	
+	public int getVertexCount() {
+		return vcount;
 	}
 }

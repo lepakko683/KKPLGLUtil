@@ -39,6 +39,10 @@ public class GLRenderObjPointer {
 		GLHandler.renderPtrSubData(this, data, offset);
 	}
 	
+	public GLRenderObj getRenderObj() {
+		return GLHandler.getROBJForRPTR(this);
+	}
+	
 	public void translateVerts(float dx, float dy, int offset, int vertCount) {
 		GLRenderObj robj = GLHandler.getROBJForRPTR(this);
 		robj.startBufferModif();
@@ -53,16 +57,30 @@ public class GLRenderObjPointer {
 		robj.finishBufferModif();
 	}
 	
-	public void setVertPositionsSquare(float x, float y, float width, float height, int offset, int vertCount) {
+	/** Rectangle to be exact */
+	public void setVertPositionsSquare(float x, float y, float width, float height, int offset, int rectCount) {
 		GLRenderObj robj = GLHandler.getROBJForRPTR(this);
 		robj.startBufferModif();
-		robj.setVertPos(x, y, offset, 1);
-		robj.setVertPos(x, y+height, offset+1, 1);
-		robj.setVertPos(x+width, y+height, offset+2, 1);
-		
-		robj.setVertPos(x+width, y+height, offset+3, 1);
-		robj.setVertPos(x+width, y, offset+4, 1);
-		robj.setVertPos(x, y, offset+5, 1);
+		for(int i=0;i<rectCount;i++) {
+			robj.setVertPos(x, y, offset+i*6, 1);
+			robj.setVertPos(x, y+height, offset+i*6+1, 1);
+			robj.setVertPos(x+width, y+height, offset+i*6+2, 1);
+			
+			robj.setVertPos(x+width, y+height, offset+i*6+3, 1);
+			robj.setVertPos(x+width, y, offset+i*6+4, 1);
+			robj.setVertPos(x, y, offset+i*6+5, 1);
+		}
+		robj.finishBufferModif();
+	}
+	
+	public void setVertPositionsTriangle(float x, float y, float width, float height, int offset, int triCount) {
+		GLRenderObj robj = GLHandler.getROBJForRPTR(this);
+		robj.startBufferModif();
+		for(int i=0;i<triCount;i++) {
+			robj.setVertPos(x, y, offset+i*3, 1);
+			robj.setVertPos(x, y+height, offset+i*3, 1);
+			robj.setVertPos(x+width, y+height, offset+i*3, 1);
+		}
 		robj.finishBufferModif();
 	}
 	

@@ -78,11 +78,44 @@ public class GLHandler {
 		renderRendObj(ptr.getOffset(), ptr.getTexture(), rendObjs.get(ptr.getArrIndex()), ptr.getVertCount());
 	}
 	
+	/** Renders the rptr using the texture that is passed as parameter */
+	public static void renderRendPtr(GLRenderObjPointer ptr, Texture tex) {
+		renderRendObj(ptr.getOffset(), tex, rendObjs.get(ptr.getArrIndex()), ptr.getVertCount());
+	}
+	
+	public static void renderRPTRPartially(GLRenderObjPointer rptr, int offset, int vcount, Texture tex) {
+		renderRendObj(offset, tex, rendObjs.get(rptr.getArrIndex()), vcount);
+	}
+	
+	public static void renderRPTRPartially(GLRenderObjPointer rptr, int offset, int vcount) {
+		renderRPTRPartially(rptr, offset, vcount, rptr.getTexture());
+	}
+	
+	public static void renderRPTRPartiallyWOTex(GLRenderObjPointer rptr, int offset, int vcount) {
+		renderRPTRPartially(rptr, offset, vcount, null);
+	}
+	
+	
+	private static boolean rendering = false;
+	private static boolean textureEnabled = false;
+	
+	public static void startRenderingRobj() {
+		rendering = true;
+	}
+	
+	public static void renderRenderSection(RenderSection rsect) {
+	}
+	
+	public static void stopRenderingRobj() {
+		
+	}
+	
 	private static void renderRendObj(int offset, Texture tex, GLRenderObj robj, int vcount) {
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_COLOR_ARRAY);
 		
 		if(tex != null) {
+			glEnable(GL_TEXTURE_2D);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 			tex.bind();
 		}
@@ -108,6 +141,7 @@ public class GLHandler {
 		glDisableClientState(GL_COLOR_ARRAY);
 		
 		if(tex != null) {
+			glDisable(GL_TEXTURE_2D);
 			glBindTexture(GL_TEXTURE_2D, 0);
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
